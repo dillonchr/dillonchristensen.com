@@ -1,25 +1,25 @@
 version: '2'
 
 networks:
-  typos:
+  dillonchr:
    driver: bridge
 
 services:
   blog:
-    container_name: blog
-    image: typos:latest
+    container_name: dillonchr_blog
+    image: dillonchr:latest
     build: .
     ports:
       - "4000:4000"
     networks:
-      - typos
+      - dillonchr
 
   cache:
-    container_name: typoscache
+    container_name: dillonchr_cache
     build:
       context: ./cache/
-    image: typoscache:latest
+    image: dillonchr_cache:latest
     ports:
       - "7720:80"
     networks:
-      - typos
+      - dillonchr
