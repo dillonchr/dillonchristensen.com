@@ -6,5 +6,5 @@ COPY . .
 RUN npm run build
 
 FROM nginx:1.15.3-alpine
-COPY --from=build /code/public/* /usr/share/nginx/html/
+COPY --from=build /code/public/ /usr/share/nginx/html/
 EXPOSE 80
