@@ -2,7 +2,7 @@ vcl 4.0;
 
 backend default {
   .host = "blog";
-  .port = "4000";
+  .port = "80";
 }
 
 sub vcl_deliver {

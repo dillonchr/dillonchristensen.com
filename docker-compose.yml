@@ -9,8 +9,6 @@ services:
     container_name: dillonchr_blog
     image: dillonchr:latest
     build: .
-    ports:
-      - "4000:4000"
     networks:
       - dillonchr
 
