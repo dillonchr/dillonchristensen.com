@@ -1,0 +1,25 @@
+version: '2'
+
+networks:
+  typos:
+   driver: bridge
+
+services:
+  blog:
+    container_name: blog
+    image: typos:latest
+    build: .
+    ports:
+      - "4000:4000"
+    networks:
+      - typos
+
+  cache:
+    container_name: typoscache
+    build:
+      context: ./cache/
+    image: typoscache:latest
+    ports:
+      - "7720:80"
+    networks:
+      - typos

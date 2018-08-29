@@ -1,0 +1,41 @@
+body {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    padding: 1rem;
+}
+
+h1,
+h2,
+h3 {
+    font-family: Arial, sans-serif;
+    line-height: 1;
+}
+
+h1 {
+    background: url("assets/me.svg");
+    background-position: 0 40%;
+    background-repeat: no-repeat;
+    background-size: 125%;
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-top: 3rem;
+}
+
+@media (min-width: 800px) {
+    body {
+        margin: auto;
+        width: 50rem;
+    }
+
+    h3 {
+        margin-top: 5rem;
+    }
+}
+
