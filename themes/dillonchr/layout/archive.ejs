@@ -1,44 +1,28 @@
+<h1>Archives</h1>
+<%- partial('_partial/links.ejs') %>
 <%
-    var title = '';
-    if (page.archive) {
-        if (page.year) title = page.year + (page.month ? '/' + page.month : '');
-        else title = __('archive_a');
-    }
+    const findPosts = (source, _name) => {
+        const r = source.find(({name}) => name === _name);
+        if (r) {
+            return r.posts;
+        }
+        return [];
+    };
 
-    var postList = [];
+    let postList = site.posts;
     if (page.category) {
-        site.categories.forEach(function(item) {
-            if(item.name === page.category) {
-                postList = item.posts.slice();
-            }
-        });
-        title = page.category;
-    }
-    else if (page.tag) {
-        site.tags.forEach(function(item) {
-            if(item.name === page.tag) {
-                postList = item.posts;
-            }
-        });
-        title = "# " + page.tag;
-    } else {
-        postList = site.posts;
+        postList = findPosts(site.categories, page.category);
+    } else if (page.tag) {
+        postList = findPosts(site.tags, page.tag);
     }
 %>
-
-<!-- Banner -->
-<%- partial('_partial/banner.ejs', {
-    mainText: title,
-    secondaryText: '',
-    faIconCss: theme.archive_font_awesome_icon_css
-}) %>
-
-<div class="w-100 ph2 ph4-m ph5-l mv5 mv6-l">
-    <div class="content">
-        <div class="mw8 center">
-            <% postList.each(function(item){ %>
-                <%- partial('_partial/article-archive', {item: item}) %>
-            <% }); %>
-        </div>
-    </div>
-</div>
+<ol>
+<% postList.reverse().each(function(item){ %>
+    <li>
+        <a href="<%- url_for(item.path) %>">
+            <%= item.date.format('MMM D YYYY') %>
+            &mdash;
+            <%- item.title %>
+        </a>
+    </li>
+<% }); %>
