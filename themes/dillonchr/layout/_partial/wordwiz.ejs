@@ -1,0 +1,60 @@
+<%
+    const nonAdverbs = ["ally","anomaly","apply","assembly","belly","bely","bubbly","bully","burly","chilly","comely","comply","costly","courtly","cuddly","curly","dally","dastardly","deadly","deathly","disorderly","doily","dragonfly","early","family","filly","fly","folly","friendly","frilly","ghastly","golly","goodly","gravelly","grisly","gully","heavenly","hilly","holly","holy","homely","homily","hourly","imply","jelly","jolly","kindly","leisurely","likely","lily","lively","lonely","lovely","lowly","mannerly","mealy","measly","melancoly","moly","monopoly","multiply","oily","only","orderly","pearly","pebbly","ply","rally","rely","reply","sally","scaly","shapely","sickly","silly","sly","sly","spritely","squiggly","stately","steely","supply","surly","tally","timely","ugly","unlikely","weekly","whirly","wily","wobbly","wordly","wrinkly","yearly"];
+
+    const getSentences = (excerpt) => excerpt.split('\n').reduce((coll, line) => {
+        if (line.trim()) {
+            return coll.concat(line.split(/[.!?]/).map(s => s.trim()).filter(s => s));
+        }
+        return coll;
+    }, []);
+
+    const getWords = (sentence) => sentence.split(' ').filter(s => s);
+
+    const getSyllables = (word) => {
+        const matches = word.replace(/^y/i, '')
+            .replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '')
+            .match(/[aeiouy]{1,2}/g);
+        return matches ? matches.length : 1;
+    };
+
+    const getAdverbs = (words) => words.filter(w => {
+        return /ly[.!?"']?$/i.test(w) &&
+            nonAdverbs.indexOf(w.match(/[a-z]+/i).shift().toLowerCase()) === -1;
+    }).length;
+
+    const analyze = (excerpt) => {
+        if (!excerpt || !excerpt.length) {
+            return {};
+        }
+
+        const totalSentences = getSentences(excerpt);
+        const totalWords = totalSentences.reduce((words, sentence) => {
+            return words.concat(getWords(sentence));
+        }, []);
+        const totalAdverbs = getAdverbs(totalWords);
+        const adverbPercentage = ((totalAdverbs / totalWords.length) * 100).toFixed(2) + '%';
+        const totalSyllables = totalWords.reduce((syllables, word) => {
+            return syllables + getSyllables(word);
+        }, 0);
+        const grade = ((0.39 * (totalWords.length / totalSentences.length)) + (11.8 * (totalSyllables / totalWords.length)) - 15.59).toFixed(2);
+
+        return {
+            sentences: totalSentences.length,
+            words: totalWords.length,
+            adverbs: totalAdverbs,
+            adverbPercentage,
+            syllables: totalSyllables,
+            grade
+        };
+    };
+
+    const analysis = analyze(content);
+%>
+<h3>Word usage/analysis</h3>
+<ul>
+    <li>Word count: <%- analysis.words %></li>
+    <li>Sentence count: <%- analysis.sentences %></li>
+    <li>Syllable count: <%- analysis.syllables %></li>
+    <li>Adverb count: <%- analysis.adverbs %> (<%- analysis.adverbPercentage %>)</li>
+    <li>Reading grade level: <%- analysis.grade %></li>
+</ul>
